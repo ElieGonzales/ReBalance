@@ -1,0 +1,22 @@
+{
+	"id": "rebalance",
+	"name": "rebalance",
+	"display_name": "ReBalance",
+	"author": [
+		"Elie07"
+	],
+	"description": "Adds Reverse Tarots... and more to come ;)",
+	"prefix": "rebal",
+	"main_file": "core.lua",
+	"priority": 0,
+	"badge_colour": "FF2222",
+	"badge_text_colour": "FFFFFF",
+	"version": "2.31",
+	"dependencies": [
+		"Lovely (>=0.7)",
+		"Balatro (>=1.0.1o)",
+		"Steamodded (>=1.0.0)"
+	],
+	"conflicts": [
+	]
+}

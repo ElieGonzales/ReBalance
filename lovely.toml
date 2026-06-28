@@ -1,0 +1,58 @@
+[manifest] # Header for the file, this should only be here once at the beginning
+version = "0.1.0"
+priority = 2 # Priority for loading the file
+
+
+#X perma dollar UI
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 1.45*2 + spacing, minh = 1.15, colour = temp_col, emboss = 0.05, r = 0.1}, nodes={
+                  {n=G.UIT.R, config={align = "cm"}, nodes={
+                    {n=G.UIT.C, config={align = "cm", r = 0.1, minw = 1.28*2+spacing, minh = 1, colour = temp_col2}, nodes={
+                      {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'dollars', prefix = localize('$')}},
+                            scale_function = function ()
+                                return scale_number(G.GAME.dollars, 2.2 * scale, 99999, 1000000)
+                            end, maxw = 1.35, colours = {G.C.MONEY}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 2, bump = true, scale = 2.2*scale}), id = 'dollar_text_UI'}}'''
+position = 'at'
+payload = '''
+{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 1.45*2 + spacing, minh = 1.15, colour = temp_col, emboss = 0.05, r = 0.1}, nodes={
+    {n=G.UIT.R, config={align = "cm"}, nodes={
+        {n=G.UIT.C, config={align = "cm", r = 0.1, minw = 1.28*2+spacing, minh = 1, colour = temp_col2}, nodes={
+            {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'dollars', prefix = localize('$')}},
+                scale_function = function ()
+                    return scale_number(G.GAME.dollars, 2.2 * scale, 100, 1000000)
+            end, maxw = 0.75, colours = {G.C.MONEY}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 2, bump = true, scale = 2.2*scale}), id = 'dollar_text_UI'}},
+            {n=G.UIT.O, config ={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'dollar_bonus', prefix = ' | X'}},
+                scale_function = function ()
+                    return scale_number(G.GAME.dollar_bonus, scale, 100, 1000000)
+            end, align = "cr", maxw = 0.6, colours = {G.C.FILTER}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 2, bump = true, scale = scale}), id = 'dollar_bonus_text_UI'}},
+'''
+match_indent = true
+
+#Reverse Chicot boss blinds
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''G.GAME.round_resets.blind_choices.Boss = get_new_boss()'''
+position = 'before'
+match_indent = true
+payload = '''
+if G.GAME.revchicot_active then
+    G.GAME.round_resets.blind_choices.Small = get_new_boss()
+    G.GAME.round_resets.blind_choices.Big = get_new_boss()
+end
+'''
+
+#stolen from Cryptid - locks Jokers in place
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 - 100*((a.pinned and not a.ignore_pinned) and a.sort_id or 0) < b.T.x + b.T.w/2 - 100*((b.pinned and not b.ignore_pinned) and b.sort_id or 0) end)"
+position = "at"
+payload = '''
+if not G.GAME.in_reverse_arcana_pack then 
+    table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 - 100*((a.pinned and not a.ignore_pinned) and a.sort_id or 0) < b.T.x + b.T.w/2 - 100*((b.pinned and not b.ignore_pinned) and b.sort_id or 0) end) 
+end'''
+match_indent = true
