@@ -174,56 +174,61 @@ function Get_random_hand(ignore, seed, allowhidden)
     end
 end
 
---hook to make the win button and Nubby work
+--hook to make win button, Nubby and rev judgement work
 local clickref = Card.click
 function Card:click()
     if self.ability.name == "c_rebal_winbtn" and not G.SETTINGS.paused then
             G.FUNCS.use_card({config = {ref_table = self}})
     end
 
-        if self.area and self.area.config.type == "title" and G.GAME.nubby_active and G.GAME.nubby_tally > 0 then
-            if not self.greyed then
-                local deck_card = nil
-                for _, card in ipairs(G.deck.cards) do
-                    if card.base.value == self.base.value and  card.base.suit == self.base.suit and self.seal == card.seal and ((self.edition and card.edition and self.edition.key == card.edition.key) or (not self.edition and not card.edition))then
-                        if #self.ability == #card.ability then
-                            local all_match = true
-                            for k, v in pairs(self.ability) do
-                                if type(v) == 'number' then
-                                    if card.ability[k] ~= v then
-                                        all_match = false
-                                        break
-                                    end
+    if self.area and self.area.config.type == "title" and G.GAME.nubby_active and G.GAME.nubby_tally > 0 then
+        if not self.greyed then
+            local deck_card = nil
+            for _, card in ipairs(G.deck.cards) do
+                if card.base.value == self.base.value and  card.base.suit == self.base.suit and self.seal == card.seal and ((self.edition and card.edition and self.edition.key == card.edition.key) or (not self.edition and not card.edition))then
+                    if #self.ability == #card.ability then
+                        local all_match = true
+                        for k, v in pairs(self.ability) do
+                            if type(v) == 'number' then
+                                if card.ability[k] ~= v then
+                                    all_match = false
+                                    break
                                 end
                             end
-                            if all_match then
-                                deck_card = card
-                                break
-                            end
-                        end 
-                    end
+                        end
+                        if all_match then
+                            deck_card = card
+                            break
+                        end
+                    end 
                 end
+            end
 
-                if deck_card then
-                    G.GAME.nubby_tally = G.GAME.nubby_tally - 1
-                    
-                    self.greyed = true
-                    self:set_sprites(nil, self.config.card)
+            if deck_card then
+                G.GAME.nubby_tally = G.GAME.nubby_tally - 1
+                
+                self.greyed = true
+                self:set_sprites(nil, self.config.card)
 
-                    draw_card(G.deck, G.hand, 90, 'up', false, deck_card)
-                    if G.GAME.nubby_tally == 0 then
-                        --ability fully used up
-                        play_sound("timpani")
-                    end
-                else
-                    play_sound("cancel")
-                    self:juice_up(0.3, 0.3)
+                draw_card(G.deck, G.hand, 90, 'up', false, deck_card)
+                if G.GAME.nubby_tally == 0 then
+                    --ability fully used up
+                    play_sound("timpani")
                 end
             else
                 play_sound("cancel")
                 self:juice_up(0.3, 0.3)
             end
+        else
+            play_sound("cancel")
+            self:juice_up(0.3, 0.3)
         end
+    end
+
+    if G.GAME.revjudgement_active and self.area.config.type == "title" then
+        SMODS.add_card({key=self.config.center.key})
+        G.FUNCS:disable_revjudgement()
+    end
     
     clickref(self)
 end
@@ -313,7 +318,7 @@ function ease_dollars(mod, instant)
     easedollarref(mod, instant)
 end
 
---hook to make rev soul work
+--hook to make hollow soul spawns work
 local createcardref = SMODS.create_card
 function SMODS.create_card(t)
     if G.GAME.used_revsoul and t.set ~= "Joker" then
@@ -322,5 +327,57 @@ function SMODS.create_card(t)
     else
         return createcardref(t)
     end
+end
+
+--self explanatory, makes rev judgement work
+G.FUNCS.disable_revjudgement = function()
+    G.GAME.revjudgement_active = false
+    G.GAME.used_jokers = G.GAME.usedjokerref
+    G.FUNCS:exit_overlay_menu()
+end
+
+Create_UIBox_revjudgement = function(rarity, len)
+    local cards = {}
+    local legendary = nil
+		--please someone add a rarity api to steamodded
+		if rarity == 1 then
+			rarity = 0
+		elseif rarity == 2 then
+			rarity = 0.9
+		elseif rarity == 3 then
+			rarity = 0.99
+		elseif rarity == 4 then
+			rarity = nil
+			legendary = true
+		end
+
+    local pool = SMODS.get_clean_pool("Joker", rarity, legendary)
+    for i, c in ipairs(pool) do
+        for _, j in ipairs(G.jokers.cards) do
+            if j.config.center.key == c then
+                table.remove(pool, i)
+                break
+            end
+        end
+    end
+
+    for i = 1, len do
+		local center = G.P_CENTERS[pseudorandom_element(pool , pseudoseed("revjudgement"..i))]
+        cards[#cards + 1] = center
+        for i, c in ipairs(pool) do
+            if c == center.key then
+                table.remove(pool, i)
+                break
+            end
+        end
+	end
+    
+	return SMODS.card_collection_UIBox(cards, { len%5, math.ceil(len/5) }, {
+		no_materialize = true,
+		snap_back = true,
+		h_mod = 1.03,
+		hide_single_page = true,
+        back_func = "disable_revjudgement"
+	})
 end
 

@@ -14,8 +14,7 @@
 	"version": "2.31",
 	"dependencies": [
 		"Lovely (>=0.7)",
-		"Balatro (>=1.0.1o)",
-		"Steamodded (>=1.0.0)"
+		"Balatro (>=1.0.1o)"
 	],
 	"conflicts": [
 	]

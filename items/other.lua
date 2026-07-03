@@ -130,7 +130,7 @@ SMODS.ScreenShader {
     end
 }
 
---hollow music
+--Hollow music
 SMODS.Sound {
     key = "hollow_music",
     path = "hollow.ogg",

@@ -71,7 +71,11 @@ SMODS.Enhancement {
     key = 'locked',
     atlas = 'Rebatlas_Enhancements', 
     pos = { x = 1, y = 0 },    
-    config = { forced_selection = true },
+    config = { forced_selection = true, x_mult = 2 },
+
+    loc_vars = function(self, info, card)
+        return { vars = {card.ability.extra.x_mult} }
+    end,
     --selects itself when drawn
     calculate = function(self, card, context)
         if context.hand_drawn or context.open_booster then

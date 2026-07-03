@@ -27,7 +27,7 @@ SMODS.Consumable {
 
                     G.FUNCS.overlay_menu{
                         definition = create_UIBox_win(),
-                        config = {no_esc = true}
+                        config = {no_esc = false}
                     }
                     
                     return true
@@ -347,7 +347,6 @@ SMODS.Consumable {
     set = "RevTarot",
 
     config = { extra = { xdollar = -2, dollarbonus = 1.25 } },
-    rarity = 1,
     atlas = "Rebatlas_Consumables",
     pos = {x= 2, y=0},
 
@@ -731,6 +730,49 @@ SMODS.Consumable {
         return false
     end
 }
+
+--Reverse Judgement
+SMODS.Consumable {
+    key = "revjudgement",
+    set='RevTarot',
+    atlas = "Rebatlas_Consumables",
+    pos = {x=1, y=3},
+    config = {extra = {choice = 3}},
+
+    loc_vars = function(self, info_queue, card)
+        return {vars={card.ability.extra.choice}}
+    end,
+
+    use = function(self, card, area, copier)
+        G.GAME.usedjokerref = SMODS.shallow_copy(G.GAME.used_jokers)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                card:juice_up(0.3, 0.5)
+                play_sound('tarot1')
+                G.GAME.revjudgement_active = true
+                local j = G.jokers.highlighted[1]
+                local rarity = j.config.center.rarity
+                SMODS.destroy_cards(j)
+                G.FUNCS.overlay_menu({
+                    definition = Create_UIBox_revjudgement(rarity, card.ability.extra.choice),
+                    config = {no_esc = true}
+                })               
+            return true
+            end
+        }))
+    end,
+    can_use = function(self, card)
+        return G.jokers and #G.jokers.highlighted == 1 and not SMODS.is_eternal(G.jokers.highlighted[1])
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
+
 
 --Reverse Soul
 SMODS.Consumable {
