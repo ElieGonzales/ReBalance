@@ -74,15 +74,29 @@ SMODS.Enhancement {
     config = { forced_selection = true, x_mult = 2 },
 
     loc_vars = function(self, info, card)
-        return { vars = {card.ability.extra.x_mult} }
+        return { vars = {card.ability.x_mult} }
     end,
+
     --selects itself when drawn
     calculate = function(self, card, context)
-        if context.hand_drawn or context.open_booster then
-            if card.area then
-                card.area:add_to_highlighted(card)
-            end
+        --forced_selection goes away after the blind, gotta reapply it if the card is drawn again
+        card.ability.forced_selection = true
+        if context.drawing_cards then
+            card.area:add_to_highlighted(card)
         end
+    end
+}
+
+--Bricked Cards
+SMODS.Enhancement {
+    key = 'bricked',
+    atlas = 'Rebatlas_Enhancements', 
+    pos = { x = 3, y = 0 },    
+    config = {indestructible = true, prevent_debuff = true},
+    
+    --Cannot be debuffed or destroyed (handled in funcs)
+    set_ability = function(self, card, context)
+       SMODS.debuff_card(card, "prevent_debuff", "Bricked")
     end
 }
 
@@ -124,5 +138,4 @@ SMODS.Enhancement:take_ownership('stone',
             end
         end
     },
-true
-)
+true)

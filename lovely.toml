@@ -1,6 +1,6 @@
-[manifest] # Header for the file, this should only be here once at the beginning
+[manifest] 
 version = "0.1.0"
-priority = 2 # Priority for loading the file
+priority = 2 
 
 
 #X perma dollar UI

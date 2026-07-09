@@ -14,13 +14,11 @@ SMODS.current_mod.reset_game_globals = function(run_start)
         G.GAME.revchicot_active = false
         G.GAME.revtrib_active = false
         G.GAME.revjudgement_active = false
+        G.GAME.revemperor_cancels = 0
     end
 end
 
 G.C.REVERSE_TAROT = HEX("C62828")
-
---setting up nubby vars
-
 
 SMODS.load_file("items/funcs.lua")()
 SMODS.load_file("items/consumables.lua")()

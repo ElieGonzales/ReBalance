@@ -5,7 +5,6 @@ SMODS.Atlas {
 	py = 95
 }
 
-
 --Asspoo
 SMODS.Joker {
     key = "asspoo",
@@ -32,7 +31,6 @@ SMODS.Joker {
     end
     
 }
-
 
 --Table Turner
 SMODS.Joker {

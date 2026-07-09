@@ -154,6 +154,30 @@ return {
 					"Earn {C:money}$#1#{}",
 				},
 			},
+			["c_rebal_revemperor"] = {
+				["name"] = "Reverse Emperor",
+				["text"] = {
+					"{V:1}Cancels{} the next",
+					"{C:attention}#1#{} {C:tarot}Tarot{} cards used",
+					"Gain {C:money}$#2#{} for each card cancelled",
+				},
+			},
+			["c_rebal_revchariot"] = {
+				["name"] = "Reverse Chariot",
+				["text"] = {
+					"Enhances {C:attention}1",
+					"selected card into a",
+					"{C:attention}Locked Card{}",
+				},
+			},
+			["c_rebal_revjustice"] = {
+				["name"] = "Reverse Justice",
+				["text"] = {
+					"Enhances {C:attention}1",
+					"selected card into a",
+					"{C:attention}Bricked Card{}",
+				},
+			},
 			["c_rebal_revhermit"] = {
 				["name"] = "Reverse Hermit",
 				["text"] = {
@@ -187,12 +211,27 @@ return {
 					"{C:attention}Enhanced{} cards",
 				},
 			},
+			["c_rebal_revtemperance"] = {
+				["name"] = "Reverse Temperance",
+				["text"] = {
+					"Sells {C:red}all{} {C:attention}Jokers{}",
+					"for {X:attention,C:white}X#1#{} their sell value",
+				},
+			},
 			["c_rebal_revdevil"] = {
 				["name"] = "Reverse Devil",
 				["text"] = {
 					"Enhances {C:attention}1",
 					"selected card into a",
 					"{C:attention}Platinum Card{}",
+				},
+			},
+			["c_rebal_revjudgement"] = {
+				["name"] = "Reverse Judgement",
+				["text"] = {
+					"{C:red}destroys{} selected {C:attention}Joker{}",
+					"Choose between {C:attention}#1# Jokers{}",
+					"of the same {C:attention}rarity{}"
 				},
 			},
 			["c_rebal_revsoul"] = {
@@ -225,8 +264,16 @@ return {
 			["m_rebal_locked"] = {
 				["name"] = "Locked Card",
 				["text"] = {
+					"{X:mult,C:white}X#1#{} Mult",
 					"forced to",
 					"be selected"
+				},
+			},
+			["m_rebal_bricked"] = {
+				["name"] = "Bricked Card",
+				["text"] = {
+					"Cannot be {C:red}destroyed{}",
+					"Cannot be {C:red}debuffed{}",
 				},
 			},
 			["m_rebal_unlucky"] = {

@@ -329,13 +329,14 @@ function SMODS.create_card(t)
     end
 end
 
---self explanatory, makes rev judgement work
+--back button for rev judgement
 G.FUNCS.disable_revjudgement = function()
     G.GAME.revjudgement_active = false
     G.GAME.used_jokers = G.GAME.usedjokerref
     G.FUNCS:exit_overlay_menu()
 end
 
+--ui for rev judgement
 Create_UIBox_revjudgement = function(rarity, len)
     local cards = {}
     local legendary = nil
@@ -381,3 +382,30 @@ Create_UIBox_revjudgement = function(rarity, len)
 	})
 end
 
+--makes bricked cards "eternal"
+local smods_is_eternal_ref = SMODS.is_eternal
+function SMODS.is_eternal(card, trigger, ...)
+    return card.ability.name == "m_rebal_bricked" or smods_is_eternal_ref(card, trigger, ...)
+end
+
+--cancels cards
+local usecardref = G.FUNCS.use_card
+function G.FUNCS.use_card(e, mute, nosave)
+    local card = e.config.ref_table
+
+    if G.GAME.revemperor_cancels > 0 and card.ability.set == "Tarot" then
+        G.GAME.revemperor_cancels = G.GAME.revemperor_cancels - 1
+        attention_text({
+            text = "Cancelled!",
+            backdrop_colour = G.C.REVERSE_TAROT,
+            align = 'bm',
+            hold = 1.4,
+            major = card
+        })
+        SMODS.destroy_cards(card)
+        ease_dollars(6, true)
+        return
+    else
+        usecardref(e, mute, nosave)
+    end
+end

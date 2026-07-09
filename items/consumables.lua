@@ -69,77 +69,77 @@ SMODS.Consumable {
        
 }
 --Instant Baron Mime
-SMODS.Consumable {
-    key = "baronmime",
-    set = "Tarot",
+-- SMODS.Consumable {
+--     key = "baronmime",
+--     set = "Tarot",
 
-    loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = G.P_CENTERS.j_baron
-        info_queue[#info_queue+1] = G.P_CENTERS.j_mime
-        info_queue[#info_queue+1] = G.P_CENTERS.m_steel
-        info_queue[#info_queue+1] = G.P_SEALS.Red
-    end,
+--     loc_vars = function(self, info_queue, card)
+--         info_queue[#info_queue+1] = G.P_CENTERS.j_baron
+--         info_queue[#info_queue+1] = G.P_CENTERS.j_mime
+--         info_queue[#info_queue+1] = G.P_CENTERS.m_steel
+--         info_queue[#info_queue+1] = G.P_SEALS.Red
+--     end,
 
-    config = { extra = {} },
-    rarity = 1,
-    atlas = "Rebatlas_Consumables",
-    pos = {x= 1, y=0},
+--     config = { extra = {} },
+--     rarity = 1,
+--     atlas = "Rebatlas_Consumables",
+--     pos = {x= 1, y=0},
 
-    use = function(self, card, context)     
-        --juices itself up
-        G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.4,
-        func = function()
-            play_sound('tarot1')
-            card:juice_up(0.3, 0.5)
-            return true
-        end
-        }))
+--     use = function(self, card, context)     
+--         --juices itself up
+--         G.E_MANAGER:add_event(Event({
+--         trigger = 'after',
+--         delay = 0.4,
+--         func = function()
+--             play_sound('tarot1')
+--             card:juice_up(0.3, 0.5)
+--             return true
+--         end
+--         }))
 
-        --convert deck into steel kings
-        for i = #G.deck.cards, 1, -1 do
-            local c = G.deck.cards[i]
-            local percent = 1.15 - (i - 0.999) / (#G.deck.cards - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.05,
-                func = function()
-                    if c and not c.ability.destroyed then
-                        c:set_ability("m_steel", true)
-                        c:set_seal("Red", true)
-                        SMODS.change_base(c, nil, "King")
-                        play_sound('card1', percent)
-                        c:juice_up(0.3, 0.3)
-                    end
-                    return true
-                end
-            }))
-        end
+--         --convert deck into steel kings
+--         for i = #G.deck.cards, 1, -1 do
+--             local c = G.deck.cards[i]
+--             local percent = 1.15 - (i - 0.999) / (#G.deck.cards - 0.998) * 0.3
+--             G.E_MANAGER:add_event(Event({
+--                 trigger = 'after',
+--                 delay = 0.05,
+--                 func = function()
+--                     if c and not c.ability.destroyed then
+--                         c:set_ability("m_steel", true)
+--                         c:set_seal("Red", true)
+--                         SMODS.change_base(c, nil, "King")
+--                         play_sound('card1', percent)
+--                         c:juice_up(0.3, 0.3)
+--                     end
+--                     return true
+--                 end
+--             }))
+--         end
 
-        --convert hand into steel kings
-        Change_cards(G.hand.cards, "King", nil, "m_steel", "Red", nil, true)
+--         --convert hand into steel kings
+--         Change_cards(G.hand.cards, "King", nil, "m_steel", "Red", nil, true)
 
-        --create the jokers
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                local targets = {"j_baron", "j_mime"}
-                for _, t in ipairs(targets) do
-                    SMODS.add_card({key = t, area = G.jokers})
-                end
-                return true
-            end
-        }))
+--         --create the jokers
+--         G.E_MANAGER:add_event(Event({
+--             trigger = 'after',
+--             delay = 0.2,
+--             func = function()
+--                 local targets = {"j_baron", "j_mime"}
+--                 for _, t in ipairs(targets) do
+--                     SMODS.add_card({key = t, area = G.jokers})
+--                 end
+--                 return true
+--             end
+--         }))
                 
-    end,
+--     end,
 
-    can_use = function(self, card)
-        return true
-    end
+--     can_use = function(self, card)
+--         return true
+--     end
 
-}
+-- }
 
 --Reverse Fool
 SMODS.Consumable {
@@ -339,6 +339,68 @@ SMODS.Consumable {
     can_use = function(self, card)
         return true
     end,
+}
+
+--Reverse Emperor
+SMODS.Consumable {
+    key = "revemperor",
+    set = "RevTarot",
+    config = { extra = { cancelled = 2, dollars_per = 6 } },
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 0, y=4},
+    loc_vars = function (self, info_queue, card)
+        return { vars = { card.ability.extra.cancelled, card.ability.extra.dollars_per, colours = {G.C.REVERSE_TAROT} } }
+    end,
+
+    use = function(self, card, context)
+        G.GAME.revemperor_cancels = card.ability.extra.cancelled
+    end,
+
+    can_use = function(self, card)
+        return true
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
+--Reverse Chariot
+SMODS.Consumable {
+    key = "revchariot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x=2, y=3},
+    set = "RevTarot",
+    config = { max_highlighted = 1, mod_conv = "m_rebal_locked" },
+    can_use = function(self, card)
+        return G.hand and #G.hand.highlighted > 0 and #G.hand.highlighted == card.ability.max_highlighted
+    end,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
+        return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
+    end,
+    can_sell = function(self, card)
+        return false
+    end
+}
+
+--Reverse Justice
+SMODS.Consumable {
+    key = "revjustice",
+    atlas = "Rebatlas_Consumables",
+    pos = {x=3, y=3},
+    set = "RevTarot",
+    config = { max_highlighted = 1, mod_conv = "m_rebal_bricked" },
+    can_use = function(self, card)
+        return G.hand and #G.hand.highlighted > 0 and #G.hand.highlighted == card.ability.max_highlighted
+    end,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
+        return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
+    end,
+    can_sell = function(self, card)
+        return false
+    end
 }
 
 --Reverse Hermit
@@ -640,6 +702,44 @@ SMODS.Consumable {
     end
 }
 
+--Reverse Temperance
+SMODS.Consumable {
+    key = "revtemperance",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 1, y=4},
+
+    config = { extra = {xsellvalue = 5} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xsellvalue} }
+    end,
+
+    use = function(self, card, context)
+        for _, joker in ipairs(G.jokers.cards) do
+            if not SMODS.is_eternal(joker) then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    delay = 0,
+                    func = function()
+                        local sellvalue = joker.sell_cost or 0
+                        ease_dollars(sellvalue * card.ability.extra.xsellvalue)
+                        SMODS.destroy_cards(joker)
+                        return true
+                    end
+                }))
+            end
+        end
+    end,
+
+    can_use = function(self, card)
+        return true
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
 --Reverse Devil
 SMODS.Consumable {
     key = "revdevil",
@@ -653,76 +753,6 @@ SMODS.Consumable {
         info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
         return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
     end,
-
-    use = function(self, card, area, copier)
-
-        --juice self up
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
-            end
-        }))
-
-        --flip selected cards
-        for i = 1, #G.hand.highlighted do
-            local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip()
-                    play_sound('card1', percent)
-                    G.hand.highlighted[i]:juice_up(0.3, 0.3)
-                    return true
-                end
-            }))
-        end
-        delay(0.2)
-
-        --convert selected cards
-        for i = 1, #G.hand.highlighted do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    G.hand.highlighted[i]:set_ability(card.ability.mod_conv)
-                    return true
-                end
-            }))
-        end
-
-        --flip back cards
-        for i = 1, #G.hand.highlighted do
-            local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip()
-                    play_sound('tarot2', percent, 0.6)
-                    G.hand.highlighted[i]:juice_up(0.3, 0.3)
-                    return true
-                end
-            }))
-        end
-
-        --unhighlight cards
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all()
-                return true
-            end
-        }))
-        delay(0.5)
-    end,
-
-    --cannot be less than 2 selected
     can_use = function(self, card)
         return G.hand and #G.hand.highlighted > 0 and #G.hand.highlighted == card.ability.max_highlighted
     end,
@@ -771,8 +801,6 @@ SMODS.Consumable {
         return false
     end
 }
-
-
 
 --Reverse Soul
 SMODS.Consumable {
@@ -867,5 +895,3 @@ SMODS.Consumable {
         end
     end
 }
-
-
