@@ -85,7 +85,7 @@ function Change_cards(cards, rank, suit, enhancement, seal, edition, selected)
         delay(0.5)
 end
 
---Returns a random hand (from ***Lib)
+--Returns a random hand (from BOSLib)
 function Get_random_hand(ignore, seed, allowhidden)
 			local chosen_hand
 			ignore = ignore or {}
@@ -113,8 +113,8 @@ function Get_random_hand(ignore, seed, allowhidden)
 
 --Rev Wheel effects
  function Edition_effects(key, source, card)
-    --holo levels up a random hand
-    if key == "e_holo" then
+    --foil levels up a random hand
+    if key == "e_foil" then
         local randhand = Get_random_hand() --Random poker hand
         update_hand_text({ sound = "button", volume = 0.7, pitch = 0.8, delay = 0.3, immediate=true}, {
             handname = localize(randhand, "poker_hands"),
@@ -127,10 +127,17 @@ function Get_random_hand(ignore, seed, allowhidden)
 			{ sound = "button", volume = 0.7, pitch = 1.1, delay = 0, immediate=true },
 			{ mult = 0, chips = 0, handname = "", level = "" }
 		)
-    --foil creates a random tarot (must have space)
-    elseif key == "e_foil" then
+        attention_text({
+            text = "Level Up!",
+            backdrop_colour = G.C.SECONDARY_SET.Planet,
+            align = 'bm',
+            hold = 1.4,
+            major = card
+        })
+    --holo creates a random tarot (must have space)
+    elseif key == "e_holo" then
         if #G.consumeables.cards < G.consumeables.config.card_limit then
-            SMODS.add_card({ set = "Tarot"})
+            SMODS.add_card({ set = "Tarot", edition = "e_negative", allow_duplicates = true })
         end
         attention_text({
             text = "Tarot!",
@@ -156,9 +163,16 @@ function Get_random_hand(ignore, seed, allowhidden)
                 }
             end
         }))
+        attention_text({
+            text = "X$1.1",
+            backdrop_colour = G.C.GOLD,
+            align = 'bm',
+            hold = 1.4,
+            major = card
+        })
     --negative gives a negative spectral card
     elseif key == "e_negative" then
-        SMODS.add_card({ set = "Spectral", edition = "e_negative" })
+        SMODS.add_card({ set = "Spectral", edition = "e_negative", allow_duplicates = true })
         attention_text({
             text = "Spectral!",
             backdrop_colour = G.C.SECONDARY_SET.Spectral,
@@ -170,6 +184,13 @@ function Get_random_hand(ignore, seed, allowhidden)
     -- other editions give 10$
     else
         ease_dollars(10, true)
+        attention_text({
+            text = "$10",
+            backdrop_colour = G.C.MONEY,
+            align = 'bm',
+            hold = 1.4,
+            major = card
+        })
         
     end
 end

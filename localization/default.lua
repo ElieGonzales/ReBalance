@@ -105,7 +105,17 @@ return {
 					"cards per hand played"
 				},
 			},
-
+			["j_rebal_snake"] = {
+				["name"] = "Snake",
+				["text"] = {
+					"{C:attention}+#2# card selection limit{} and", 
+					"{C:attention}+#2# hand size{} every time",
+					" a {C:attention}#3#{} is played",
+					"Requirement increases by", 
+					"#2# card each trigger",
+					"{C:inactive}(Currently +#1#)"
+				},
+			},
 
 		
 		},
@@ -154,12 +164,28 @@ return {
 					"Earn {C:money}$#1#{}",
 				},
 			},
+			["c_rebal_revemperess"] = {
+				["name"] = "Reverse Emperess",
+				["text"] = {
+					"Enhances {C:attention}2",
+					"selected cards into",
+					"{C:attention}Nult Cards{}",
+				},
+			},
 			["c_rebal_revemperor"] = {
 				["name"] = "Reverse Emperor",
 				["text"] = {
 					"{V:1}Cancels{} the next",
 					"{C:attention}#1#{} {C:tarot}Tarot{} cards used",
 					"Gain {C:money}$#2#{} for each card cancelled",
+				},
+			},
+			["c_rebal_revhierophant"] = {
+				["name"] = "Reverse Hierophant",
+				["text"] = {
+					"Enhances {C:attention}2",
+					"selected cards into",
+					"{C:attention}Malus Cards{}",
 				},
 			},
 			["c_rebal_revchariot"] = {
@@ -211,6 +237,14 @@ return {
 					"{C:attention}Enhanced{} cards",
 				},
 			},
+			["c_rebal_revdeath"] = {
+				["name"] = "Reverse Death",
+				["text"] = {
+					"Destroys every card in hand",
+					"with same {C:attention}suit{} or {C:attention}rank{}",
+					"as selected card"
+				},
+			},
 			["c_rebal_revtemperance"] = {
 				["name"] = "Reverse Temperance",
 				["text"] = {
@@ -253,6 +287,21 @@ return {
 		
 		},
 		["Enhanced"] = {
+			["m_rebal_nult"] = {
+				["name"] = "Nult Card",
+				["text"] = {
+					"{C:mult}+#1#{} Mult",
+					"{X:mult,C:white}X#2#{} Mult",
+					
+				},
+			},
+			["m_rebal_malus"] = {
+				["name"] = "Malus Card",
+				["text"] = {
+					"{C:chips}+#1#{} extra chips",
+					"{X:chips,C:white}X#2#{} Chips",
+				},
+			},
 			["m_rebal_platinum"] = {
 				["name"] = "Platinum Card",
 				["text"] = {

@@ -3,7 +3,7 @@ G.screenshader_fade = 1
 SMODS.current_mod.reset_game_globals = function(run_start)
     if run_start then
         G.GAME.usedjokerref = {}
-        G.GAME.rev_arcana_chance = 0.1
+        G.GAME.rev_arcana_chance = 0.2
         G.GAME.rev_arcana_cumul_chance = 0
         G.GAME.rev_soul_chance = 0.003
         G.GAME.dollar_bonus = 1

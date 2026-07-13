@@ -62,7 +62,7 @@ SMODS.Sticker {
 
 --Reverse Arcana pack
 --takes ownership of arcana packs, and gives them a chance to be reverse
---chance starts at 10%, increases by 5% each time a reverse arcana pack is not drawn, and resets to 10% when one is drawn
+--chance starts at 20%, increases by 5% each time a reverse arcana pack is not drawn, and resets to 20% when one is drawn
 --chance increases by a flat 10% when reverse fool is used
 SMODS.Booster:take_ownership_by_kind("Arcana", 
 {

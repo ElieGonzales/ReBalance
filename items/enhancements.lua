@@ -5,6 +5,28 @@ SMODS.Atlas {
     py = 95
 }
 
+--Nult Cards
+SMODS.Enhancement {
+    key = 'nult',
+    atlas = 'Rebatlas_Enhancements', 
+    pos = { x = 0, y = 1 },    
+    config = { mult = 20, x_mult = 0.75 },
+    loc_vars = function(self, info, card)
+        return { vars = {card.ability.mult, card.ability.x_mult} }
+    end
+}
+
+--Malus Cards
+SMODS.Enhancement {
+    key = 'malus',
+    atlas = 'Rebatlas_Enhancements', 
+    pos = { x = 1, y = 1 },    
+    config = { bonus = 100, x_chips = 0.75 },
+    loc_vars = function(self, info, card)
+        return { vars = {card.ability.bonus, card.ability.x_chips} }
+    end
+}
+
 --Platinum cards
 SMODS.Enhancement {
     key = 'platinum',
@@ -24,7 +46,7 @@ SMODS.Enhancement {
 
             message = "X$"..tostring(card.ability.extra.xdollar)
 
-            --actual game logic for the card (ripped from ease_dollars)
+            --ease_dollars but with X
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.4,

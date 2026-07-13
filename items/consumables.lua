@@ -5,69 +5,69 @@ SMODS.Atlas {
     py = 95
 }
 
---Win Button
-SMODS.Consumable {
-    key = "winbtn",
-    set = "Tarot",
+-- --Win Button
+-- SMODS.Consumable {
+--     key = "winbtn",
+--     set = "Tarot",
 
-    config = { extra = {} },
-    atlas = "Rebatlas_Consumables",
-    pos = {x= 0, y=0},
+--     config = { extra = {} },
+--     atlas = "Rebatlas_Consumables",
+--     pos = {x= 0, y=0},
 
-    --deletes the deck
-    use = function(self, card, context)
+--     --deletes the deck
+--     use = function(self, card, context)
 
-        if pseudorandom('winbtn') < 0.99 then
-            --fake winscreen
-            G.E_MANAGER:add_event(Event({
-                trigger = 'before',
-                func = (function()
-                    play_sound('win')
-                    G.SETTINGS.paused = true
+--         if pseudorandom('winbtn') < 0.99 then
+--             --fake winscreen
+--             G.E_MANAGER:add_event(Event({
+--                 trigger = 'before',
+--                 func = (function()
+--                     play_sound('win')
+--                     G.SETTINGS.paused = true
 
-                    G.FUNCS.overlay_menu{
-                        definition = create_UIBox_win(),
-                        config = {no_esc = false}
-                    }
+--                     G.FUNCS.overlay_menu{
+--                         definition = create_UIBox_win(),
+--                         config = {no_esc = false}
+--                     }
                     
-                    return true
-                end)
-            }))
-            delay(1)
-            --removes ui
-            G.FUNCS:exit_overlay_menu()
+--                     return true
+--                 end)
+--             }))
+--             delay(1)
+--             --removes ui
+--             G.FUNCS:exit_overlay_menu()
 
-            Tarot_quip(card, "Fuck you!", {backdrop_colour = G.C.RED})
-            SMODS.destroy_cards(G.deck.cards)
-            local editions = {}
-            for i = 1, G.jokers.config.card_limit do
-                if G.jokers.cards[i] then editions[i] = G.jokers.cards[i].edition or nil else editions[i] = nil end
-            end
-            SMODS.destroy_cards(G.jokers.cards, {bypass_eternal = true})
-            G.E_MANAGER:add_event(Event({
-                    trigger = "after",
-                    delay = 0.4,
-                    func = function()
-                        local setlimit = G.jokers.config.card_limit
-                        for i = 1, setlimit do
-                            SMODS.add_card {
-                                key = "j_rebal_asspoo",
-                                force_stickers = {"eternal"},
-                                edition = editions[i]
-                            }
-                        end
-                        return true
-                    end
-                }))
-        else
-            win_game()
-        end
-    end,
-    can_use = function(self, card)
-        return true
-    end
+--             Tarot_quip(card, "Fuck you!", {backdrop_colour = G.C.RED})
+--             SMODS.destroy_cards(G.deck.cards)
+--             local editions = {}
+--             for i = 1, G.jokers.config.card_limit do
+--                 if G.jokers.cards[i] then editions[i] = G.jokers.cards[i].edition or nil else editions[i] = nil end
+--             end
+--             SMODS.destroy_cards(G.jokers.cards, {bypass_eternal = true})
+--             G.E_MANAGER:add_event(Event({
+--                     trigger = "after",
+--                     delay = 0.4,
+--                     func = function()
+--                         local setlimit = G.jokers.config.card_limit
+--                         for i = 1, setlimit do
+--                             SMODS.add_card {
+--                                 key = "j_rebal_asspoo",
+--                                 force_stickers = {"eternal"},
+--                                 edition = editions[i]
+--                             }
+--                         end
+--                         return true
+--                     end
+--                 }))
+--         else
+--             win_game()
+--         end
+--     end,
+--     can_use = function(self, card)
+--         return true
+--     end
        
-}
+-- }
 --Instant Baron Mime
 -- SMODS.Consumable {
 --     key = "baronmime",
@@ -341,6 +341,29 @@ SMODS.Consumable {
     end,
 }
 
+--Reverse Emperess
+SMODS.Consumable {
+    key = "revemperess",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 3, y=4},
+
+    config = { max_highlighted = 2, mod_conv = "m_rebal_nult"},
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
+        return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
+    end,
+
+    can_use = function(self, card)
+        return #G.hand.highlighted == card.ability.max_highlighted
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
 --Reverse Emperor
 SMODS.Consumable {
     key = "revemperor",
@@ -365,6 +388,28 @@ SMODS.Consumable {
     end
 }
 
+--Reverse Hierophant
+SMODS.Consumable {
+    key = "revhierophant",
+    set = "RevTarot",
+    config = { max_highlighted = 2, mod_conv = "m_rebal_malus" },
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 0, y=5},
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
+        return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
+    end,
+
+    can_use = function(self, card)
+        return #G.hand.highlighted == card.ability.max_highlighted
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
 --Reverse Chariot
 SMODS.Consumable {
     key = "revchariot",
@@ -373,7 +418,7 @@ SMODS.Consumable {
     set = "RevTarot",
     config = { max_highlighted = 1, mod_conv = "m_rebal_locked" },
     can_use = function(self, card)
-        return G.hand and #G.hand.highlighted > 0 and #G.hand.highlighted == card.ability.max_highlighted
+        return #G.hand.highlighted == card.ability.max_highlighted
     end,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
@@ -392,7 +437,7 @@ SMODS.Consumable {
     set = "RevTarot",
     config = { max_highlighted = 1, mod_conv = "m_rebal_bricked" },
     can_use = function(self, card)
-        return G.hand and #G.hand.highlighted > 0 and #G.hand.highlighted == card.ability.max_highlighted
+        return #G.hand.highlighted == card.ability.max_highlighted
     end,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
@@ -702,6 +747,34 @@ SMODS.Consumable {
     end
 }
 
+--Reverse Death
+SMODS.Consumable {
+    key = "revdeath",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 2, y=4},
+
+    use = function(self, card, context)
+        local c = G.hand.highlighted[1]
+        play_sound('tarot1')
+        for _, c2 in ipairs(G.hand.cards) do
+            if c2.config.card.suit == c.config.card.suit or c2.config.card.value == c.config.card.value then
+                SMODS.destroy_cards(c2)
+            end
+        end
+        card:juice_up(0.3, 0.5)
+        
+    end,
+
+    can_use = function(self, card)
+        return #G.hand.highlighted == 1
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
 --Reverse Temperance
 SMODS.Consumable {
     key = "revtemperance",
@@ -715,6 +788,7 @@ SMODS.Consumable {
     end,
 
     use = function(self, card, context)
+        play_sound('tarot1')
         for _, joker in ipairs(G.jokers.cards) do
             if not SMODS.is_eternal(joker) then
                 G.E_MANAGER:add_event(Event({
@@ -729,6 +803,7 @@ SMODS.Consumable {
                 }))
             end
         end
+        card:juice_up(0.3, 0.5)
     end,
 
     can_use = function(self, card)
