@@ -270,7 +270,7 @@ SMODS.Joker {
         if context.before and not context.blueprint then
             local stoned = false
             for _, c in ipairs (context.scoring_hand) do
-                if c:get_id() == 13 or c:get_id() == 12 then
+                if c:get_id() == 13 or c:get_id() == 12 or c.ability.any_rank then
                     c:set_ability("m_stone")
                     stoned = true
                 end
@@ -347,15 +347,28 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        if context.joker_main and next(context.poker_hands[card.ability.extra.type]) and #G.play.cards == 5+card.ability.extra.selection_bonus then
+        if context.joker_main and next(context.poker_hands[card.ability.extra.type]) and #context.scoring_hand == 5+card.ability.extra.selection_bonus then
+            local cards = {}
+            for _, c in ipairs(context.scoring_hand) do
+                cards[#cards + 1] = c:get_id()
+            end
+            table.sort(cards)
+            local lastcard = 0
+            for _, c in ipairs(cards) do
+                if lastcard ~= 0 and c ~= lastcard + 1 then
+                    return {}
+                end
+                lastcard = c
+            end
             SMODS.scale_card(card, {
                 ref_table = card.ability.extra, -- the table that has the value you are changing in
                 ref_value = "selection_bonus", -- the key to the value in the ref_table
                 scalar_value = "change", -- the key to the value to scale by, in the ref_table by default
             })
             SMODS.change_play_limit(card.ability.extra.change)
-		    SMODS.change_discard_limit(card.ability.extra.change)
+            SMODS.change_discard_limit(card.ability.extra.change)
             G.hand:change_size(card.ability.extra.change)
+            
         end
     end,
 

@@ -410,6 +410,23 @@ SMODS.Consumable {
     end
 }
 
+--Reverse Lovers
+SMODS.Consumable {
+    key = 'revlovers',
+    set = 'RevTarot',
+    atlas = 'Rebatlas_Consumables',
+    pos = { x = 1, y = 6 },
+    config = { max_highlighted = 1, mod_conv = 'm_rebal_none' },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
+        return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
 --Reverse Chariot
 SMODS.Consumable {
     key = "revchariot",
@@ -417,9 +434,6 @@ SMODS.Consumable {
     pos = {x=2, y=3},
     set = "RevTarot",
     config = { max_highlighted = 1, mod_conv = "m_rebal_locked" },
-    can_use = function(self, card)
-        return #G.hand.highlighted == card.ability.max_highlighted
-    end,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
         return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
@@ -436,9 +450,6 @@ SMODS.Consumable {
     pos = {x=3, y=3},
     set = "RevTarot",
     config = { max_highlighted = 1, mod_conv = "m_rebal_bricked" },
-    can_use = function(self, card)
-        return #G.hand.highlighted == card.ability.max_highlighted
-    end,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
         return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
@@ -836,6 +847,113 @@ SMODS.Consumable {
     end
 }
 
+--Reverse Tower
+SMODS.Consumable {
+    key = "revtower",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 2, y=6},
+
+    config = { max_highlighted = 1, mod_conv = "m_rebal_omni" },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.mod_conv]
+        return { vars = { card.ability.max_highlighted, localize { type = 'name_text', set = 'Enhanced', key = card.ability.mod_conv } } }
+    end,
+    can_use = function(self, card)
+        return G.hand and #G.hand.highlighted > 0 and #G.hand.highlighted == card.ability.max_highlighted
+    end,
+    can_sell = function(self, card)
+        return false
+    end
+}
+
+--Reverse Star
+SMODS.Consumable {
+    key = "revstar",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 3, y=5},
+
+    config = { suit_keep = 'Diamonds' },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { localize(card.ability.suit_keep, 'suits_singular'), colours = {G.C.SUITS[card.ability.suit_keep]}} }
+    end,
+
+    use = function(self, card, context)
+        for _, c in ipairs(G.hand.cards) do
+            if c.config.card.suit ~= card.ability.suit_keep then
+                SMODS.destroy_cards(c)
+            end
+        end
+    end,
+
+    can_use = function(self, card)
+        return (G.hand and #G.hand.cards > 0)
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
+--Reverse Moon
+SMODS.Consumable {
+    key = "revmoon",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 2, y=5},
+
+    config = { suit_keep = 'Clubs' },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { localize(card.ability.suit_keep, 'suits_singular'), colours = {G.C.SUITS[card.ability.suit_keep]}} }
+    end,
+
+    use = function(self, card, context)
+        for _, c in ipairs(G.hand.cards) do
+            if c.config.card.suit ~= card.ability.suit_keep then
+                SMODS.destroy_cards(c)
+            end
+        end
+    end,
+
+    can_use = function(self, card)
+        return (G.hand and #G.hand.cards > 0)
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
+--Reverse Sun
+SMODS.Consumable {
+    key = "revsun",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 3, y=5},
+
+    config = { suit_keep = 'Hearts' },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { localize(card.ability.suit_keep, 'suits_singular'), colours = {G.C.SUITS[card.ability.suit_keep]}} }
+    end,
+
+    use = function(self, card, context)
+        for _, c in ipairs(G.hand.cards) do
+            if c.config.card.suit ~= card.ability.suit_keep then
+                SMODS.destroy_cards(c)
+            end
+        end
+    end,
+
+    can_use = function(self, card)
+        return (G.hand and #G.hand.cards > 0)
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
 --Reverse Judgement
 SMODS.Consumable {
     key = "revjudgement",
@@ -870,6 +988,35 @@ SMODS.Consumable {
     end,
     can_use = function(self, card)
         return G.jokers and #G.jokers.highlighted == 1 and not SMODS.is_eternal(G.jokers.highlighted[1])
+    end,
+
+    can_sell = function(self, card)
+        return false
+    end
+}
+
+--Reverse World
+SMODS.Consumable {
+    key = "revworld",
+    set = "RevTarot",
+    atlas = "Rebatlas_Consumables",
+    pos = {x= 0, y=6},
+
+    config = { suit_keep = 'Spades' },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { localize(card.ability.suit_keep, 'suits_singular'), colours = {G.C.SUITS[card.ability.suit_keep]}} }
+    end,
+
+    use = function(self, card, context)
+        for _, c in ipairs(G.hand.cards) do
+            if c.config.card.suit ~= card.ability.suit_keep then
+                SMODS.destroy_cards(c)
+            end
+        end
+    end,
+
+    can_use = function(self, card)
+        return (G.hand and #G.hand.cards > 0)
     end,
 
     can_sell = function(self, card)
@@ -929,6 +1076,7 @@ SMODS.Consumable {
     set = 'RevTarot',
     atlas = 'Rebatlas_Consumables',
     hidden = true,
+    soul_rate = 0,
     pos = { x = 3, y = 1 },
 
     loc_vars = function(self, info_queue, card)

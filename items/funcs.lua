@@ -394,7 +394,7 @@ Create_UIBox_revjudgement = function(rarity, len)
         end
 	end
     
-	return SMODS.card_collection_UIBox(cards, { len%5, math.ceil(len/5) }, {
+	return SMODS.card_collection_UIBox(cards, {5,5}, {
 		no_materialize = true,
 		snap_back = true,
 		h_mod = 1.03,
@@ -429,4 +429,13 @@ function G.FUNCS.use_card(e, mute, nosave)
     else
         usecardref(e, mute, nosave)
     end
+end
+
+--hook for omni card face
+local isfaceref = Card.is_face
+function Card:is_face(from_boss)
+    if SMODS.has_enhancement(self, "m_rebal_omni") then
+        return true
+    end
+    return isfaceref(self, from_boss)
 end

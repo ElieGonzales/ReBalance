@@ -56,3 +56,11 @@ if not G.GAME.in_reverse_arcana_pack then
     table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 - 100*((a.pinned and not a.ignore_pinned) and a.sort_id or 0) < b.T.x + b.T.w/2 - 100*((b.pinned and not b.ignore_pinned) and b.sort_id or 0) end) 
 end'''
 match_indent = true
+
+#redo the whole id thing (dont pmo)
+[[patches]]
+[patches.regex]
+target = ["card.lua", "functions/common_events.lua", "functions/misc_functions.lua"]
+pattern = '(?<obj>[^\(\s]+):get_id\(\)(?<rest>(?:\s*%\s*\d+)?\s*(?:==|~=|>=|<=|>|<)\s*[^\s]+)'
+position = "at"
+payload = '(${obj}.ability.any_rank or ${obj}:get_id()${rest})'

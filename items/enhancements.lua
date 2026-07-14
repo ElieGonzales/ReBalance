@@ -5,7 +5,7 @@ SMODS.Atlas {
     py = 95
 }
 
---Nult Cards
+--Nult cards
 SMODS.Enhancement {
     key = 'nult',
     atlas = 'Rebatlas_Enhancements', 
@@ -16,7 +16,7 @@ SMODS.Enhancement {
     end
 }
 
---Malus Cards
+--Malus cards
 SMODS.Enhancement {
     key = 'malus',
     atlas = 'Rebatlas_Enhancements', 
@@ -109,7 +109,7 @@ SMODS.Enhancement {
     end
 }
 
---Bricked Cards
+--Bricked cards
 SMODS.Enhancement {
     key = 'bricked',
     atlas = 'Rebatlas_Enhancements', 
@@ -149,6 +149,89 @@ SMODS.Enhancement {
             return ret
         end
     end,
+}
+
+--None cards
+SMODS.Enhancement {
+    key = 'none',
+    atlas = 'centers',
+    prefix_config = {atlas = false},
+    pos = { x = 1, y = 0 },
+    no_rank = true,
+    no_suit = true,
+    replace_base_card = true,
+    always_scores = true,
+
+    config = {extra =  {
+        bonus = 20,
+        x_chips = 2,
+        mult = 4,
+        x_mult = 1.5,
+        h_chips = 100,
+        h_x_chips = 1.5,
+        h_mult = 20,
+        h_x_mult = 2,
+        p_dollars = 4,
+        h_dollars = 6,
+        level_up = 1,
+        odds = 11
+    }},
+
+    calculate = function(self, card, context)
+        if context.cardarea == G.play and context.main_scoring then
+            local ret = {}
+            if SMODS.pseudorandom_probability(card, 'rebal_none_mult', 1, card.ability.extra.odds) then
+                ret.mult = card.ability.extra.mult
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_xmult', 1, card.ability.extra.odds) then
+                ret.xmult = card.ability.extra.x_mult
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_xchips', 1, card.ability.extra.odds) then
+                ret.xchips = card.ability.extra.x_chips
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_bonus', 1, card.ability.extra.odds) then
+                ret.bonus = card.ability.extra.bonus
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_pdollars', 1, card.ability.extra.odds) then
+                ret.dollars = card.ability.extra.p_dollars
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_levelup', 1, card.ability.extra.odds) then
+                ret.level_up = card.ability.extra.level_up
+            end
+            return ret
+        end
+
+        if context.cardarea == G.hand and context.main_scoring then
+            local ret = {}
+            if SMODS.pseudorandom_probability(card, 'rebal_none_hmult', 1, card.ability.extra.odds) then
+                ret.h_mult = card.ability.extra.h_mult
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_hxmult', 1, card.ability.extra.odds) then
+                ret.h_x_mult = card.ability.extra.h_x_mult
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_hchips', 1, card.ability.extra.odds) then
+                ret.h_chips = card.ability.extra.h_chips
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_hxchips', 1, card.ability.extra.odds) then
+                ret.h_x_chips = card.ability.extra.h_x_chips
+            end
+            if SMODS.pseudorandom_probability(card, 'rebal_none_hdollars', 1, card.ability.extra.odds) then
+                ret.h_dollars = card.ability.extra.h_dollars
+            end
+            return ret
+        end
+    end
+}
+
+--Omni cards
+SMODS.Enhancement {
+    key = "omni",
+    atlas = "Rebatlas_Enhancements",
+    pos = { x = 2, y = 1 },
+    config = {any_rank = true},
+    any_suit = true,
+    overrides_base_rank = true,
+    replace_base_card = true,
 }
 
 --Worse stone cards

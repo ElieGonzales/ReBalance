@@ -22,6 +22,20 @@ return {
 					"{C:inactive}({C:attention}#2#{C:inactive} remaining)"
 				},
 			},
+			["undiscovered_revtarot"] = {
+ 			["name"] = "{C:red}???{}",
+ 			["text"] = {"{E:1,C:red}?????????{}"},
+			},
+		},
+		["Back"] = {
+			["b_rebal_none"] = {
+				["name"] = "None Deck",
+				["text"] = {
+					"Start run with",
+					"52 {C:attention}None Cards{}",
+					"in deck"
+				},
+			},
 		},
 		["Blind"] = {
 			
@@ -188,6 +202,14 @@ return {
 					"{C:attention}Malus Cards{}",
 				},
 			},
+			["c_rebal_revlovers"] = {
+				["name"] = "Reverse Lovers",
+				["text"] = {
+					"Enhances {C:attention}1",
+					"selected card into a",
+					"{C:attention}None Card{}",
+				},
+			},
 			["c_rebal_revchariot"] = {
 				["name"] = "Reverse Chariot",
 				["text"] = {
@@ -260,12 +282,48 @@ return {
 					"{C:attention}Platinum Card{}",
 				},
 			},
+			["c_rebal_revtower"] = {
+				["name"] = "Reverse Tower",
+				["text"] = {
+					"Enhances {C:attention}1",
+					"selected card into an",
+					"{C:attention}Omni Card{}",
+				},
+			},
+			["c_rebal_revstar"] = {
+				["name"] = "Reverse Star",
+				["text"] = {
+					"{C:red}Destroys{} all non-{V:1}#1#{}",
+					"cards held in hand",
+				},
+			},
+			["c_rebal_revmoon"] = {
+				["name"] = "Reverse Moon",
+				["text"] = {
+					"{C:red}Destroys{} all non-{V:1}#1#{}",
+					"cards held in hand",
+				},
+			},
+			["c_rebal_revsun"] = {
+				["name"] = "Reverse Sun",
+				["text"] = {
+					"{C:red}Destroys{} all non-{V:1}#1#{}",
+					"cards held in hand",
+				},
+			},
 			["c_rebal_revjudgement"] = {
 				["name"] = "Reverse Judgement",
 				["text"] = {
-					"{C:red}destroys{} selected {C:attention}Joker{}",
+					"{C:red}Destroy{} selected {C:attention}Joker{}",
 					"Choose between {C:attention}#1# Jokers{}",
 					"of the same {C:attention}rarity{}"
+				},
+			},
+			["c_rebal_revworld"] = {
+				["name"] = "Reverse World",
+				["text"] = {
+					"{C:red}Destroys{} all non-{V:1}#1#{}",
+					"cards held in hand",
 				},
 			},
 			["c_rebal_revsoul"] = {
@@ -333,6 +391,20 @@ return {
                     "{C:green}#4# in #5#{} chance",
                     "for {C:red}$-#6#{} and {C:mult}#3#{} Mult",
                 },
+			},
+			["m_rebal_none"] = {
+				["name"] = "None Card",
+				["text"] = {
+					"{C:inactive}Does nothing?",
+				},
+			},
+			["m_rebal_omni"] = {
+				["name"] = "Omni Card",
+				["text"] = {
+					"Can be used",
+					"as any suit",
+					"and any rank"
+				},
 			},
 		},
 		["Edition"] = {

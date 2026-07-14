@@ -18,9 +18,15 @@ SMODS.ConsumableType {
     default = "c_rebal_revfool",
     primary_colour = G.C.REVERSE_TAROT,
     secondary_colour = G.C.REVERSE_TAROT,
-    text_colour = HEX("000000")
+    text_colour = HEX("000000"),
+    collection_rows = { 5, 6 }
 }
-
+SMODS.UndiscoveredSprite {
+    key = "RevTarot",
+    atlas = "Rebatlas_Misc",
+    pos = { x = 1, y = 0 },
+    overlay_pos = { x = 2, y = 0 }
+}
 
 --Broken Sticker
 SMODS.Sticker {
@@ -141,4 +147,22 @@ SMODS.Sound {
             return nil
         end
     end
+}
+
+--None Deck
+SMODS.Back {
+    key = "none",
+    pos = { x = 1, y = 0 },
+    apply = function(self, back)
+        G.E_MANAGER:add_event(Event({
+           trigger = 'immediate',
+           delay = 0,
+           func = function()
+                for _, c in ipairs(G.deck.cards) do
+                    c:set_ability('m_rebal_none')
+                end
+                return true
+            end
+        }))
+    end,
 }
