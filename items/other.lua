@@ -79,6 +79,20 @@ SMODS.Booster:take_ownership_by_kind("Arcana",
             G.GAME.in_reverse_arcana_pack = true
             ease_colour(G.C.DYN_UI.MAIN, G.C.REVERSE_TAROT)
             ease_background_colour{new_colour = darken(G.C.BLACK, 0.2), special_colour = G.C.REVERSE_TAROT, contrast = 3}
+            G.E_MANAGER:add_event(Event({
+                trigger = 'before',
+                func = function()
+                    attention_text({
+                        scale = 0.8,
+                        text = "Skipping will banish rightmost joker!",
+                        hold = 12,
+                        align = "cm",
+                        offset = { x = 0, y = -2.7 },
+                        major = G.play,
+                    })
+                return true
+                end
+            }))
         else
             G.GAME.rev_arcana_cumul_chance = G.GAME.rev_arcana_cumul_chance + 0.05
             G.GAME.in_reverse_arcana_pack = false

@@ -318,16 +318,25 @@ function SMODS.current_mod.calculate(self, context)
     end
 end
 
---redefs can_skip_booster to not allow skipping reverse arcana packs
-G.FUNCS.can_skip_booster = function(e)
-    if not G.GAME.in_reverse_arcana_pack and (not (G.GAME.STOP_USE and G.GAME.STOP_USE > 0)) and
-    (G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK or (G.hand  )) then 
-        e.config.colour = G.C.GREY
-        e.config.button = 'skip_booster'
-    else
-        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-        e.config.button = nil
+--skipping a rev tarot pack banishes rightmost joker
+local skipboosterref = G.FUNCS.skip_booster
+G.FUNCS.skip_booster = function(e)
+    if G.GAME.in_reverse_arcana_pack then
+        if next(G.jokers.cards) then
+            local j = G.jokers.cards[#G.jokers.cards]
+            SMODS.destroy_cards(j)
+            G.GAME.banned_keys[j.config.center.key] = true
+            attention_text({
+                text = "Banished!",
+                backdrop_colour = G.C.RED,
+                align = 'bm',
+                major = j,
+                delay = 0.45
+            })
+        end
     end
+
+    skipboosterref()
 end
 
 --redefs ease_dollars to make rev hermit work
@@ -394,7 +403,7 @@ Create_UIBox_revjudgement = function(rarity, len)
         end
 	end
     
-	return SMODS.card_collection_UIBox(cards, {5,5}, {
+	return SMODS.card_collection_UIBox(cards, {3}, {
 		no_materialize = true,
 		snap_back = true,
 		h_mod = 1.03,

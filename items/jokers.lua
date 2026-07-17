@@ -154,6 +154,52 @@ SMODS.Joker {
     end
 }
 
+--Snake
+SMODS.Joker {
+    key = "snake",
+    rarity = 3,
+    atlas = "Rebatlas_Jokers",
+    pos = {x=4, y=1},
+
+    config = {extra = {selection_bonus = 0, change = 1, type = 'Straight'}},
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.selection_bonus, card.ability.extra.change, localize(card.ability.extra.type, 'poker_hands') } }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and next(context.poker_hands[card.ability.extra.type]) and #context.scoring_hand == 5+card.ability.extra.selection_bonus then
+            local cards = {}
+            for _, c in ipairs(context.scoring_hand) do
+                cards[#cards + 1] = c:get_id()
+            end
+            table.sort(cards)
+            local lastcard = 0
+            for _, c in ipairs(cards) do
+                if lastcard ~= 0 and c ~= lastcard + 1 then
+                    return {}
+                end
+                lastcard = c
+            end
+            SMODS.scale_card(card, {
+                ref_table = card.ability.extra, -- the table that has the value you are changing in
+                ref_value = "selection_bonus", -- the key to the value in the ref_table
+                scalar_value = "change", -- the key to the value to scale by, in the ref_table by default
+            })
+            SMODS.change_play_limit(card.ability.extra.change)
+            SMODS.change_discard_limit(card.ability.extra.change)
+            G.hand:change_size(card.ability.extra.change)
+            
+        end
+    end,
+
+    remove_from_deck = function(self, card, from_debuff)
+        SMODS.change_play_limit(-card.ability.extra.selection_bonus)
+        SMODS.change_discard_limit(-card.ability.extra.selection_bonus)
+        G.hand:change_size(-card.ability.extra.selection_bonus)
+    end
+}
+
 --Reverse Canio
 SMODS.Joker {
     key = "revcaino", --[sic]
@@ -330,51 +376,5 @@ SMODS.Joker {
                 end
             }))
         end
-    end
-}
-
---Snake
-SMODS.Joker {
-    key = "snake",
-    rarity = 3,
-    atlas = "Rebatlas_Jokers",
-    pos = {x=4, y=1},
-
-    config = {extra = {selection_bonus = 0, change = 1, type = 'Straight'}},
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.selection_bonus, card.ability.extra.change, localize(card.ability.extra.type, 'poker_hands') } }
-    end,
-
-    calculate = function(self, card, context)
-        if context.joker_main and next(context.poker_hands[card.ability.extra.type]) and #context.scoring_hand == 5+card.ability.extra.selection_bonus then
-            local cards = {}
-            for _, c in ipairs(context.scoring_hand) do
-                cards[#cards + 1] = c:get_id()
-            end
-            table.sort(cards)
-            local lastcard = 0
-            for _, c in ipairs(cards) do
-                if lastcard ~= 0 and c ~= lastcard + 1 then
-                    return {}
-                end
-                lastcard = c
-            end
-            SMODS.scale_card(card, {
-                ref_table = card.ability.extra, -- the table that has the value you are changing in
-                ref_value = "selection_bonus", -- the key to the value in the ref_table
-                scalar_value = "change", -- the key to the value to scale by, in the ref_table by default
-            })
-            SMODS.change_play_limit(card.ability.extra.change)
-            SMODS.change_discard_limit(card.ability.extra.change)
-            G.hand:change_size(card.ability.extra.change)
-            
-        end
-    end,
-
-    remove_from_deck = function(self, card, from_debuff)
-        SMODS.change_play_limit(-card.ability.extra.selection_bonus)
-        SMODS.change_discard_limit(-card.ability.extra.selection_bonus)
-        G.hand:change_size(-card.ability.extra.selection_bonus)
     end
 }
