@@ -6,31 +6,31 @@ SMODS.Atlas {
 }
 
 --Asspoo
-SMODS.Joker {
-    key = "asspoo",
-    blueprint_compat = true,
-    in_pool = function ()
-        return false
-    end,
+-- SMODS.Joker {
+--     key = "asspoo",
+--     blueprint_compat = true,
+--     in_pool = function ()
+--         return false
+--     end,
         
-    rarity = 1,
-    atlas = "Rebatlas_Jokers",
-    pos = {x= 0, y=0},
-    config = { extra = {chips = -100} },
+--     rarity = 1,
+--     atlas = "Rebatlas_Jokers",
+--     pos = {x= 0, y=0},
+--     config = { extra = {chips = -100} },
 
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.chips } }
-    end,
+--     loc_vars = function(self, info_queue, card)
+--         return { vars = { card.ability.extra.chips } }
+--     end,
 
-    calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                chips = card.ability.extra.chips
-            }
-        end
-    end
+--     calculate = function(self, card, context)
+--         if context.joker_main then
+--             return {
+--                 chips = card.ability.extra.chips
+--             }
+--         end
+--     end
     
-}
+-- }
 
 --Table Turner
 SMODS.Joker {
@@ -133,26 +133,26 @@ SMODS.Joker {
 }
 
 --Op joker wtv
-SMODS.Joker {
-    key = "opjoker",
-    bluepint_compat = true,
-    rarity = 3,
-    atlas = "Rebatlas_Jokers",
-    pos = {x=0, y=1},
-    config = {extra = {eemult = 5}},
+-- SMODS.Joker {
+--     key = "opjoker",
+--     bluepint_compat = true,
+--     rarity = 3,
+--     atlas = "Rebatlas_Jokers",
+--     pos = {x=0, y=1},
+--     config = {extra = {eemult = 5}},
 
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.eemult } }
-    end,
+--     loc_vars = function(self, info_queue, card)
+--         return { vars = { card.ability.extra.eemult } }
+--     end,
 
-    calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                eemult = card.ability.extra.eemult
-            }
-        end
-    end
-}
+--     calculate = function(self, card, context)
+--         if context.joker_main then
+--             return {
+--                 eemult = card.ability.extra.eemult
+--             }
+--         end
+--     end
+-- }
 
 --Snake
 SMODS.Joker {
